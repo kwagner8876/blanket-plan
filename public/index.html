@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blanket Plan</title>
+<meta name="theme-color" content="#2F5D50">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Blankets">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+:root{
+  --bg:#F5F0E6; --card:#FFFDF8; --ink:#2A2824; --sub:#776F62; --line:#E5DDCD;
+  --forest:#2F5D50; --forest-2:#E3ECE7; --leather:#8B5A2B; --warn:#B4541A; --warn-bg:#FBEBDD;
+  --serif: ui-serif, "New York", Georgia, serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body{padding-top:env(safe-area-inset-top);padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+body.noNav{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+h1,h2,h3{font-family:var(--serif);font-weight:700;letter-spacing:-.01em}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+header{padding:18px 0 6px}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--leather)}
+header h1{font-size:28px;line-height:1.1;margin-top:2px}
+.loc{font-size:13px;color:var(--sub);text-align:right}
+.status{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--sub);margin-top:8px}
+.status button{color:var(--forest);font-weight:600;padding:4px 0}
+.hero{display:block;width:100%;text-align:left;margin-top:12px;background:var(--forest);color:#fff;border-radius:18px;padding:16px 18px;position:relative;overflow:hidden}
+.hero .lbl{font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;font-weight:600}
+.hero .big{font-family:var(--serif);font-size:30px;font-weight:700;margin:4px 0 2px;padding-right:56px}
+.hero .why{font-size:14px;opacity:.92}
+.hero .sw{position:absolute;right:16px;top:16px;width:44px;height:44px;border-radius:12px;border:3px solid rgba(255,255,255,.7)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-top:14px}
+.card h2{font-size:18px;margin-bottom:8px}
+.need{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line)}
+.need:first-of-type{border-top:0}
+.dot{width:14px;height:14px;border-radius:4px;flex:none;display:inline-block}
+.need .n{font-weight:600}
+.need .w{font-size:13px;color:var(--sub);margin-left:auto;text-align:right}
+.alerts .a{display:flex;gap:8px;font-size:14px;background:var(--warn-bg);color:#6E3510;border-radius:10px;padding:8px 10px;margin-top:6px}
+.alerts h2+.a{margin-top:0}
+.week{margin-top:14px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin-top:10px}
+.dayhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:6px}
+.dayhead b{font-family:var(--serif);font-size:17px}
+.dayhead span{font-size:13px;color:var(--sub)}
+.halves{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.half{text-align:left;border-radius:12px;padding:9px 10px;background:#F7F2E8;border:1px solid var(--line);min-height:76px;position:relative}
+.half.night{background:#EEF0F4}
+.half.done{opacity:.45}
+.half.nowp{outline:2px solid var(--forest);outline-offset:-1px}
+.half .p{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--sub)}
+.half .bl{display:flex;align-items:center;gap:6px;font-weight:600;margin:4px 0 3px;font-size:14px;line-height:1.2}
+.half .wx{font-size:12px;color:var(--sub)}
+.half .ov{position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;background:var(--leather);color:#fff;border-radius:6px;padding:1px 5px}
+.flag{font-size:12.5px;color:var(--warn);margin-top:7px;font-weight:500}
+.none{color:var(--forest)}
+.bk{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 0;border-top:1px solid var(--line)}
+.bk:first-of-type{border-top:0}
+.bk .sw2{width:38px;height:38px;border-radius:10px;flex:none}
+.bk .t{font-weight:600}
+.bk .s{font-size:13px;color:var(--sub)}
+.bk .r{margin-left:auto;font-weight:600;font-size:14px;white-space:nowrap}
+.tag{display:inline-block;font-size:11px;font-weight:600;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+.tag.wp{background:#DDE8F5;color:#22406B}
+.tag.out{background:var(--warn-bg);color:#6E3510}
+.btn{display:block;width:100%;background:var(--forest);color:#fff;font-weight:600;border-radius:12px;padding:13px;margin-top:12px;text-align:center}
+.btn.ghost{background:transparent;color:var(--forest);border:1.5px solid var(--forest)}
+.btn.danger{background:transparent;color:#A33;border:1.5px solid #D9B2B2}
+.btn.small{display:inline-block;width:auto;padding:9px 14px;margin-top:0}
+.btn:disabled{opacity:.5}
+.hint{font-size:13px;color:var(--sub);margin-top:6px;line-height:1.45}
+label.f{display:block;font-size:13px;font-weight:600;color:var(--sub);margin-top:12px}
+label.f input,label.f select,label.f textarea,.inp{display:block;width:100%;margin-top:5px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:500;color:var(--ink);font-size:16px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.searchrow{display:flex;gap:8px;align-items:stretch;margin-top:5px}
+.searchrow .inp{margin-top:0}
+.results button{display:block;width:100%;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-top:6px;background:#fff}
+.results button.on{border-color:var(--forest);background:var(--forest-2)}
+.tog{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.tog:first-of-type{border-top:0}
+.tog .tt{font-weight:600}.tog .ts{font-size:13px;color:var(--sub)}
+.sw-in{appearance:none;-webkit-appearance:none;width:48px;height:28px;border-radius:20px;background:#D6CEBE;position:relative;flex:none;transition:.2s}
+.sw-in:checked{background:var(--forest)}
+.sw-in::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
+.sw-in:checked::after{left:23px}
+.colors{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.colors{gap:14px;padding:4px}
+.colors button{width:38px;height:38px;border-radius:10px;position:relative}
+.colors button.on{box-shadow:0 0 0 3px var(--card),0 0 0 6px var(--ink)}
+.colors button.on::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.pv{display:flex;align-items:center;gap:12px;background:#F7F2E8;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:10px}
+.pv .sw2{width:44px;height:44px;border-radius:12px;flex:none}
+.pv b{font-size:17px}
+.pv .s{font-size:12.5px;color:var(--sub)}
+.halves.one{grid-template-columns:1fr}
+.flag b{font-weight:700}
+.feedbar{position:fixed;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom));z-index:4;padding:0 12px 8px;pointer-events:none}
+.feedbar button{pointer-events:auto;display:flex;align-items:center;gap:10px;width:100%;max-width:560px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;box-shadow:0 4px 14px rgba(0,0,0,.08);text-align:left;font-size:14px}
+.feedbar .fd{width:10px;height:10px;border-radius:50%;flex:none}
+.feedbar .ft{font-weight:600}
+.feedbar .fs{color:var(--sub);margin-left:auto;white-space:nowrap;font-size:13px}
+body.hasFeed{padding-bottom:calc(140px + env(safe-area-inset-bottom))}
+.big2{font-family:var(--serif);font-size:34px;font-weight:700}
+.meal{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.meal:first-of-type{border-top:0}
+.meal b{width:38px;flex:none;color:var(--leather)}
+.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btnrow .btn{margin-top:10px}
+input[type=range]{width:100%;accent-color:var(--forest);margin-top:8px}
+nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,253,248,.96);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+nav button{padding:10px 0 12px;font-size:12px;font-weight:600;color:var(--sub);display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button svg{width:22px;height:22px}
+nav button.on{color:var(--forest)}
+.scrim{position:fixed;inset:0;background:rgba(30,26,20,.45);display:none;z-index:10}
+.scrim.on{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:11;background:var(--card);border-radius:20px 20px 0 0;max-height:88vh;overflow:auto;transform:translateY(105%);transition:transform .25s ease;padding-bottom:env(safe-area-inset-bottom)}
+.sheet.on{transform:none}
+.sheet .in{max-width:560px;margin:0 auto;padding:10px 18px 28px}
+.grab{width:40px;height:5px;border-radius:3px;background:#D6CEBE;margin:4px auto 10px}
+.sheet h3{font-size:22px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px;margin-top:10px}
+.kv dt{color:var(--sub)} .kv dd{font-weight:600}
+.reason{background:var(--forest-2);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:12px;line-height:1.45}
+.hours{display:flex;gap:6px;overflow-x:auto;margin-top:12px;padding-bottom:4px}
+.hours div{flex:none;text-align:center;background:#F7F2E8;border-radius:10px;padding:6px 8px;font-size:12px;min-width:50px}
+.hours b{display:block;font-size:15px;margin-top:2px}
+.err{color:#A33;font-size:13px;margin-top:8px}
+/* install guide */
+.install{padding-top:28px}
+.install .appicon{width:84px;height:84px;border-radius:20px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.install h1{font-size:30px;margin-top:16px}
+.steps{counter-reset:s;margin-top:16px}
+.step{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-top:10px}
+.step .num{counter-increment:s;flex:none;width:30px;height:30px;border-radius:50%;background:var(--forest);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.step .num::before{content:counter(s)}
+.step b{display:block;margin-bottom:2px}
+.shareico{display:inline-block;vertical-align:-4px;width:20px;height:20px;color:#1D6FE0}
+.pointer{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13px;font-weight:600;border-radius:12px;padding:8px 12px;animation:bob 1.4s ease-in-out infinite}
+.pointer.ipad{left:auto;right:20px;bottom:auto;top:calc(10px + env(safe-area-inset-top));transform:none}
+@keyframes bob{50%{margin-bottom:6px;margin-top:6px}}
+/* iPad / wide screens */
+@media (min-width:820px){
+  .wrap{max-width:1180px;padding:0 28px}
+  .wide-top{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px;align-items:start}
+  .wide-top .hero,.wide-top .card{margin-top:12px}
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+  .day{margin-top:0;padding:10px}
+  .dayhead{flex-direction:column;gap:0}
+  .halves{grid-template-columns:1fr}
+  .half{min-height:96px}
+  nav .in{max-width:640px}
+  .feedbar button{max-width:760px}
+  .narrow{max-width:620px;margin:0 auto}
+  .sheet{left:50%;right:auto;width:560px;transform:translate(-50%,105%);border-radius:20px 20px 0 0}
+  .sheet.on{transform:translate(-50%,0)}
+}
+
+/* ---- v3: barns, horses, sharing ---- */
+.chips{display:flex;gap:8px;overflow-x:auto;margin-top:12px;padding-bottom:2px}
+.chips button{flex:none;padding:7px 14px;border-radius:20px;border:1px solid var(--line);background:var(--card);font-weight:600;font-size:14px}
+.chips button.on{background:var(--forest);border-color:var(--forest);color:#fff}
+.hero .hlist{margin-top:6px;display:grid;gap:4px}
+.hero .hrow{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600}
+.hero .hrow .dot{border:2px solid rgba(255,255,255,.7)}
+.hero .hrow span.n{opacity:.8;font-weight:500;min-width:70px}
+.donebar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;background:rgba(255,255,255,.12);border-radius:12px;padding:8px 10px;font-size:14px}
+.donebar button{background:#fff;color:var(--forest);font-weight:700;border-radius:10px;padding:8px 12px}
+.donebar button.undo{background:transparent;color:#fff;text-decoration:underline;font-weight:600;padding:8px 4px}
+.who{font-size:12px;font-weight:600;color:var(--leather)}
+.check{font-size:12.5px;color:var(--forest);margin-top:5px;font-weight:600}
+.mline{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;line-height:1.25;margin-top:3px}
+.mline .dot{width:10px;height:10px;border-radius:3px}
+.mline .hn{color:var(--sub);font-weight:500}
+.row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 0;border-top:1px solid var(--line)}
+.card h2+.row,.card .row:first-of-type{border-top:0}
+.row .t{font-weight:600}.row .s{font-size:13px;color:var(--sub)}
+.row .r{margin-left:auto;color:var(--sub);font-size:14px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--forest-2);color:var(--forest);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.code{font-family:ui-monospace,Menlo,monospace;font-size:38px;font-weight:700;letter-spacing:.18em;text-align:center;background:#F7F2E8;border-radius:14px;padding:14px;margin-top:12px}
+.welcome{padding-top:36px;text-align:center}
+.welcome .appicon{width:84px;height:84px;border-radius:20px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.welcome h1{font-size:30px;margin-top:16px}
+.syncdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.ok{color:var(--forest)}
+.pickh{display:flex;align-items:center;gap:10px;width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;margin-top:8px;background:#fff;text-align:left}
+.pickh b{flex:1}
+.toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:12px;padding:9px 14px;font-size:14px;font-weight:600;z-index:20;display:none}
+.toast.on{display:block}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<nav id="nav"><div class="in">
+  <button data-tab="week" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Week</button>
+  <button data-tab="closet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 8c3-3 13-3 16 0l-1 10c-4 2-10 2-14 0z"/><path d="M8 7v12M16 7v12"/></svg>Blankets</button>
+  <button data-tab="feed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.5 12a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1z"/><path d="M8 8a4 4 0 0 1 8 0"/></svg>Feed</button>
+  <button data-tab="barn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-6h6v6"/></svg>Barn</button>
+</div></nav>
+<div class="scrim" id="scrim"></div>
+<div class="feedbar" id="feedbar"></div>
+<div class="sheet" id="sheet"><div class="in" id="sheetIn"></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="engine.js"></script>
+<script>
+"use strict";
+const E=window.BPEngine;
+/* ================= storage ================= */
+const LKEY="blanketplan.local.v3", BKEY="blanketplan.barn.v3", OLDKEY="blanketplan.state.v1", FKEY="blanketplan.forecast.v1";
+const load=k=>{ try{ const r=localStorage.getItem(k); return r?JSON.parse(r):null; }catch(e){ return null; } };
+const store=(k,v)=>{ try{ v==null?localStorage.removeItem(k):localStorage.setItem(k,JSON.stringify(v)); }catch(e){} };
+let local=Object.assign({barnId:null,memberId:null,pending:[],sel:"all",installSkipped:false,pushOn:false},load(LKEY)||{});
+let barn=load(BKEY);
+const old=load(OLDKEY);
+if(old&&old.installSkipped) local.installSkipped=true;
+if(local.barnId&&!barn) local.barnId=null;
+let fc=load(FKEY), fcStatus="idle", tab="week", sync="ok", flow=null, needsRender=false;
+const qs=new URLSearchParams(location.search);
+const inviteFromUrl=(qs.get("join")||"").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,8);
+function persist(){ store(LKEY,local); store(BKEY,barn); }
+
+/* ================= helpers ================= */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad=E.pad, addDays=E.addDays, hr=E.hr;
+const dayName=(ds,long)=>new Date(ds+"T12:00:00Z").toLocaleDateString("en-US",{weekday:long?"long":"short",timeZone:"UTC"});
+const md=ds=>new Date(ds+"T12:00:00Z").toLocaleDateString("en-US",{month:"numeric",day:"numeric",timeZone:"UTC"});
+const fmtT=t=>{ if(!t) return ""; const [h,m]=String(t).split(":").map(Number); return ((h%12)||12)+(m?":"+pad(m):"")+(h>=12?"pm":"am"); };
+const fmtHour=iso=>fmtT(iso.slice(11,16));
+const fmtClock=ms=>new Date(ms).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"}).replace(" ","").toLowerCase();
+const rangeTxt=b=>(+b.min<=-20?"below "+b.max:b.min+"–"+b.max)+"°";
+const todayLocal=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const isIPad=()=>/iPad/.test(navigator.userAgent)||(/Macintosh/.test(navigator.userAgent)&&navigator.maxTouchPoints>1);
+const isIOS=()=>/iPhone|iPod/.test(navigator.userAgent)||isIPad();
+const standalone=()=>window.navigator.standalone===true||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches);
+const SHARE_SVG='<svg class="shareico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
+function toast(t){ const el=$("toast"); el.textContent=t; el.classList.add("on"); clearTimeout(toast.t); toast.t=setTimeout(()=>el.classList.remove("on"),2400); }
+
+const horses=()=>barn?barn.horses:[];
+const horseById=id=>horses().find(h=>h.id===id);
+const selHorses=()=>{ const hs=horses(); if(hs.length<=1||local.sel==="all") return hs; const h=horseById(local.sel); return h?[h]:hs; };
+const oneHorse=()=>selHorses().length===1;
+const memberName=id=>{ const m=barn&&barn.members.find(x=>x.id===id); return m?m.name:""; };
+const me=()=>barn&&barn.members.find(m=>m.id===local.memberId);
+const byId=id=>barn.blankets.find(b=>b.id===id);
+
+/* ================= server sync ================= */
+async function api(method,path,body){
+  const r=await fetch(path,{method,headers:body?{"content-type":"application/json"}:{},body:body?JSON.stringify(body):undefined});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok){ const e=new Error(j.error||("HTTP "+r.status)); e.status=r.status; throw e; }
+  return j;
+}
+function setSync(s){ sync=s; const el=$("syncTxt"); if(el) el.innerHTML=syncHtml(); }
+function syncHtml(){
+  const c={ok:"#3C8D5A",saving:"#D9822B",offline:"#B9B1A2"}[sync]||"#B9B1A2";
+  const t={ok:barn&&barn.members.length>1?"Shared · up to date":"Saved",saving:"Saving…",offline:"Offline · will sync"}[sync]||"";
+  return `<span class="syncdot" style="background:${c}"></span>${t}`;
+}
+/* Apply changes right away on this device, then send them to the barn. */
+function act(ops,opts){
+  ops=Array.isArray(ops)?ops:[ops];
+  barn=E.applyOps(barn,ops); local.pending.push(...ops); persist();
+  if(!(opts&&opts.silent)) render();
+  flush();
+}
+let flushing=false;
+async function flush(){
+  if(flushing||!local.pending.length||!local.barnId) return;
+  flushing=true; setSync("saving");
+  const batch=local.pending.slice(0,100);
+  try{
+    const doc=await api("POST","/api/barn",{id:local.barnId,ops:batch});
+    local.pending=local.pending.slice(batch.length);
+    barn=E.applyOps(doc,local.pending); persist(); flushing=false;
+    if(local.pending.length) return flush();
+    setSync("ok"); safeRender();
+  }catch(e){ flushing=false; setSync("offline"); }
+}
+async function pull(){
+  if(!local.barnId) return;
+  try{
+    const doc=await api("GET","/api/barn?id="+encodeURIComponent(local.barnId));
+    barn=E.applyOps(doc,local.pending); persist();
+    if(local.pending.length) flush(); else setSync("ok");
+    safeRender();
+  }catch(e){ setSync("offline"); }
+}
+function busy(){ const a=document.activeElement; return $("sheet").classList.contains("on")||(a&&$("app").contains(a)&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)); }
+function safeRender(){ if(busy()){ needsRender=true; return; } render(); }
+document.addEventListener("focusout",()=>setTimeout(()=>{ if(needsRender&&!busy()){ needsRender=false; render(); } },150));
+
+/* ================= weather ================= */
+async function geocode(q){
+  const r=await fetch("https://geocoding-api.open-meteo.com/v1/search?count=6&language=en&format=json&name="+encodeURIComponent(q.trim()));
+  if(!r.ok) throw new Error("search failed");
+  const j=await r.json();
+  return (j.results||[]).map(x=>({name:[x.name,x.admin1,x.country_code==="US"?"":x.country].filter(Boolean).join(", "),lat:x.latitude,lon:x.longitude,timezone:x.timezone||null}));
+}
+async function loadForecast(force){
+  if(!barn||!barn.place) return;
+  const p=barn.place;
+  const fresh=fc&&fc.lat===p.lat&&fc.lon===p.lon&&(Date.now()-fc.fetchedAt<45*60*1000);
+  if(fresh&&!force){ fcStatus="ok"; safeRender(); return; }
+  fcStatus="loading"; safeRender();
+  try{
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&hourly=temperature_2m,precipitation_probability,precipitation,wind_speed_10m&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=9`);
+    if(!r.ok) throw new Error("forecast");
+    const data=await r.json(); if(!data.hourly||!data.hourly.time) throw new Error("bad");
+    fc={lat:p.lat,lon:p.lon,fetchedAt:Date.now(),data}; store(FKEY,fc); fcStatus="ok";
+    if(data.timezone&&!p.timezone) act({op:"barn",set:{timezone:data.timezone}},{silent:true});
+  }catch(e){ fcStatus=(fc&&fc.lat===p.lat&&fc.lon===p.lon)?"offline":"error"; }
+  safeRender();
+}
+function week(){
+  if(!fc||!barn||!barn.place||fc.lat!==barn.place.lat||fc.lon!==barn.place.lon) return null;
+  return E.buildWeek(fc.data,barn.am,barn.pm,Date.now());
+}
+
+/* ================= plan helpers ================= */
+function plans(wk){ return selHorses().map(h=>({h,plan:E.planHorse(barn,wk,h)})); }
+const visitKey=x=>x.date+(x.kind==="day"?"-am":"-pm");
+const shiftOf=slot=>barn.shifts&&barn.shifts[slot];
+function changeText(a,b){ if(!a&&b) return `Put on ${b.name}`; if(a&&!b) return `Take off ${a.name}`; if(!a&&!b) return "No blanket"; return `${a.name} → ${b.name}`; }
+const cid=x=>x&&x.chosen?x.chosen.id:"none";
+function dayFlags(ps,i,d){
+  const out={am:[],pm:[],alerts:[]};
+  ps.forEach(({h,plan})=>{
+    const pd=plan[i], prev=i>0?plan[i-1].night:null, nm=ps.length>1?h.name+": ":"";
+    if(prev&&pd.day&&!pd.day.done){
+      if(cid(prev)!==cid(pd.day)) out.am.push(nm+changeText(prev.chosen,pd.day.chosen));
+      if(pd.day.p.t-prev.p.t>=25&&!out.alerts.some(a=>a.startsWith("Big swing "+dayName(d.date)))) out.alerts.push(`Big swing ${dayName(d.date)}: ${prev.p.t}° overnight → ${pd.day.p.t}° by afternoon. Check for sweating.`);
+    }
+    if(pd.day&&pd.night&&!pd.night.done&&cid(pd.day)!==cid(pd.night)) out.pm.push(nm+changeText(pd.day.chosen,pd.night.chosen));
+    [pd.day,pd.night].forEach(x=>{ if(x&&x.warn&&!x.overridden&&!x.done) out.alerts.push(`${nm}${dayName(x.date)} ${x.kind}: ${x.warn}`); });
+  });
+  return out;
+}
+function feedAll(){ const t=todayLocal(); return selHorses().map(h=>({h,fs:E.feedStatus(h.feed,Date.now(),t)})); }
+const LEVEL={green:"#3C8D5A",orange:"#D9822B",red:"#C0392B"};
+const RANK={red:0,orange:1,green:2};
+
+/* ================= screens before a barn exists ================= */
+function viewInstall(){
+  const ipad=isIPad(), code=inviteFromUrl;
+  return `<div class="install narrow">
+    <img class="appicon" src="icons/icon-192.png" alt="">
+    <h1>${code?"You're invited! First, add":"Put"} Blanket Plan on your ${ipad?"iPad":"iPhone"}</h1>
+    <p class="hint" style="font-size:15px">It takes 20 seconds and makes it work like a real app, with reminders.</p>
+    <div class="steps">
+      <div class="step"><span class="num"></span><div><b>Tap the Share button ${SHARE_SVG}</b>${ipad?"It's at the top right, next to the address bar.":"It's at the bottom of the screen in Safari."}</div></div>
+      <div class="step"><span class="num"></span><div><b>Tap “Add to Home Screen”</b>Scroll down the list if you don't see it right away.</div></div>
+      <div class="step"><span class="num"></span><div><b>Tap “Add”, then open Blanket Plan from your Home Screen</b>${code?"Choose “Join a barn” and enter this code:":"Set it up there. Anything entered here in Safari stays in Safari."}</div></div>
+    </div>
+    ${code?`<div class="code">${esc(code)}</div>`:""}
+    <p class="hint">Not in Safari? Open this page in Safari first.</p>
+    <button class="btn ghost" data-act="skipInstall">Just use it in the browser</button>
+    <div class="pointer ${ipad?"ipad":""}">${ipad?"↗ Share is up here":"↓ Share is down here"}</div>
+  </div>`;
+}
+function viewWelcome(){
+  return `<div class="welcome narrow"><img class="appicon" src="icons/icon-192.png" alt="">
+    <h1>Blanket Plan</h1>
+    <p class="hint" style="font-size:15px">A week of blanket decisions from your forecast and your own blankets.</p>
+    <button class="btn" data-act="flowNew">Start my barn</button>
+    <button class="btn ghost" data-act="flowJoin">Join a barn with a code</button></div>`;
+}
+function viewMigrate(){
+  return `<div class="narrow"><header><div class="eyebrow">New in Blanket Plan</div><h1>Share the barn</h1></header>
+  <div class="card"><p style="line-height:1.5">You can now add more horses and share blanketing with helpers. Each person gets the plan, their own shift and reminders.</p>
+    <p class="hint">Your blankets, settings and feed come along. Nothing is lost.</p>
+    <label class="f">Your first name<input id="mName" maxlength="40" placeholder="So helpers know who did what" autocomplete="given-name"></label>
+    <div class="err" id="mErr"></div>
+    <button class="btn" data-act="doMigrate">Continue</button></div></div>`;
+}
+function viewJoin(){
+  return `<div class="narrow"><header><div class="eyebrow">Join a barn</div><h1>Enter your invite code</h1></header>
+  <div class="card">
+    <label class="f">Invite code<input id="jCode" value="${esc(inviteFromUrl)}" maxlength="8" autocapitalize="characters" autocomplete="off" style="font-size:22px;letter-spacing:.15em;text-transform:uppercase" placeholder="ABC123"></label>
+    <label class="f">Your first name<input id="jName" maxlength="40" autocomplete="given-name"></label>
+    <div class="err" id="jErr"></div>
+    <button class="btn" data-act="doJoin">Join</button>
+    <button class="btn ghost" data-act="flowBack">Back</button></div></div>`;
+}
+let setupPlace=null;
+function viewSetup(){
+  return `<div class="narrow"><header><div class="eyebrow">Welcome</div><h1>Let's set up your barn</h1></header>
+  <div class="card">
+    <label class="f">Your first name<input id="sMe" maxlength="40" autocomplete="given-name"></label>
+    <label class="f">Horse's name<input id="sHorse" maxlength="40" placeholder="e.g. Murphy"></label>
+    <p class="hint">You can add more horses later.</p>
+    <label class="f">Where's the barn?</label>
+    <div class="searchrow"><input class="inp" id="placeQ" placeholder="City or ZIP code" enterkeyhint="search"><button class="btn small" data-act="placeSearch">Search</button></div>
+    <div class="results" id="placeRes">${setupPlace?`<button class="on" disabled>✓ ${esc(setupPlace.name)}</button>`:""}</div>
+    <div class="row2">
+      <label class="f">Morning barn time<input type="time" id="sAm" value="07:00"></label>
+      <label class="f">Evening barn time<input type="time" id="sPm" value="18:00"></label>
+    </div>
+    <p class="hint">"Day" runs from morning to evening barn time, "night" from evening to the next morning.</p>
+    <div class="err" id="sErr"></div>
+    <button class="btn" data-act="doSetup">Create my barn</button>
+    <button class="btn ghost" data-act="flowBack">Back</button></div></div>`;
+}
+
+/* ================= main tabs ================= */
+function chips(allowAll){
+  const hs=horses(); if(hs.length<=1) return "";
+  const sel=(!allowAll&&local.sel==="all")?hs[0].id:local.sel;
+  return `<div class="chips">${allowAll?`<button data-sel="all" class="${sel==="all"?"on":""}">All horses</button>`:""}${hs.map(h=>`<button data-sel="${esc(h.id)}" class="${sel===h.id?"on":""}">${esc(h.name)}</button>`).join("")}</div>`;
+}
+function statusLine(){
+  const when=fc?fmtClock(fc.fetchedAt):"";
+  const wx=fcStatus==="loading"?"Getting forecast…":fcStatus==="offline"?`Forecast from ${when}`:fc?`Forecast ${when}`:"";
+  return `<span><span id="syncTxt">${syncHtml()}</span> · ${wx}</span><button data-act="refresh">↻ Refresh</button>`;
+}
+function halfBtn(rows,label){
+  const x=rows[0].x;
+  if(!x) return `<div class="half ${label==="Night"?"night":""}"><div class="p">${label}</div><div class="wx" style="margin-top:6px">Forecast not out yet</div></div>`;
+  const rain=x.p.rain>=30?` · 🌧 ${x.p.rain}%`:"", wind=x.p.wind>=10?` · 💨 ${x.p.wind}`:"";
+  const body=rows.length===1
+    ? `<div class="bl ${x.chosen?"":"none"}">${x.chosen?`<span class="dot" style="background:${esc(x.chosen.color)}"></span>${esc(x.chosen.name)}`:"No blanket"}</div>`
+    : rows.map(({h,x})=>`<div class="mline">${x.chosen?`<span class="dot" style="background:${esc(x.chosen.color)}"></span>`:`<span class="dot" style="background:transparent;border:1.5px solid var(--line)"></span>`}<span class="hn">${esc(h.name)}</span> ${x.chosen?esc(x.chosen.name):"none"}</div>`).join("");
+  const anyOv=rows.some(r=>r.x.overridden);
+  return `<button class="half ${label==="Night"?"night":""} ${x.done?"done":""} ${x.current?"nowp":""}" data-open="${x.key}">
+    ${anyOv?'<span class="ov">YOU</span>':""}
+    <div class="p">${label}${x.current?" · now":""}</div>${body}
+    <div class="wx">${label==="Night"?"Low":"High"} ${x.p.t}°${rain}${wind}</div></button>`;
+}
+function viewWeek(){
+  const wk=week(), hs=selHorses();
+  const title=hs.length===1?hs[0].name:barn.name;
+  const head=`<div class="top"><div><div class="eyebrow">Blanket plan</div><h1>${esc(title)}</h1></div>
+    <div class="loc">${esc(barn.place?barn.place.name:"")}<br>Barn ${fmtT(barn.am)} & ${fmtT(barn.pm)}</div></div>
+    <div class="status">${statusLine()}</div>${chips(true)}`;
+  if(!barn.place) return `<header>${head}</header><div class="card narrow"><h2>Where's the barn?</h2><p class="hint">Set the barn's location in the Barn tab to get the forecast.</p><button class="btn" data-tab-go="barn">Go to Barn settings</button></div>`;
+  if(!wk) return `<header>${head}</header><div class="card narrow">${fcStatus==="error"?`<h2>Couldn't get the forecast</h2><p class="hint">Check your internet connection and try again.</p><button class="btn" data-act="refresh">Try again</button>`:`<h2>Getting the forecast…</h2>`}</div>`;
+  const ps=plans(wk);
+  const flags=wk.days.map((d,i)=>dayFlags(ps,i,d));
+  // next period (first not finished)
+  const periods=wk.days.flatMap((d,i)=>[{i,k:"day"},{i,k:"night"}]).filter(o=>ps[0].plan[o.i][o.k]);
+  const nx=periods.find(o=>!ps[0].plan[o.i][o.k].done)||periods[periods.length-1];
+  const nxRows=ps.map(({h,plan})=>({h,x:plan[nx.i][nx.k]})), x0=nxRows[0].x;
+  const lbl=x0.date===wk.today?(x0.kind==="day"?"Today":"Tonight"):(x0.date===addDays(wk.today,1)?(x0.kind==="day"?"Tomorrow":"Tomorrow night"):`${dayName(x0.date,true)} ${x0.kind}`);
+  const slot=x0.kind==="day"?"am":"pm", at=slot==="am"?barn.am:barn.pm, vk=visitKey(x0), chk=barn.checks[vk], onShift=shiftOf(slot);
+  const startedVisit=wk.now>=x0.p.start.slice(0,10)+"T"+pad(hr(at))+":00"||x0.current;
+  const shiftTxt=onShift?` · ${esc(memberName(onShift))}'s shift`:"";
+  const heroMain=nxRows.length===1
+    ?`<div class="big">${x0.chosen?esc(x0.chosen.name):"No blanket"}</div><div class="why">${x0.kind==="night"?"Low":"High"} ${x0.p.t}° · feels like ${Math.round(x0.eff)}°</div>`
+    :`<div class="hlist">${nxRows.map(({h,x})=>`<div class="hrow"><span class="dot" style="background:${x.chosen?esc(x.chosen.color):"transparent"}"></span><span class="n">${esc(h.name)}</span>${x.chosen?esc(x.chosen.name):"No blanket"}</div>`).join("")}</div><div class="why" style="margin-top:6px">${x0.kind==="night"?"Low":"High"} ${x0.p.t}°</div>`;
+  const doneBar=chk?`<div class="donebar"><span>✓ Done${chk.by?" by "+esc(memberName(chk.by)||"someone"):""} at ${fmtClock(chk.at)}</span><button class="undo" data-act="uncheck" data-key="${vk}">Undo</button></div>`
+    :`<div class="donebar"><span>${startedVisit?"Not marked done yet":"Coming up"}</span><button data-act="check" data-key="${vk}">Mark ${fmtT(at)} done</button></div>`;
+  const hero=`<div class="hero"><div data-open="${x0.key}" style="cursor:pointer">${nxRows.length===1&&x0.chosen?`<span class="sw" style="background:${esc(x0.chosen.color)}"></span>`:""}
+      <div class="lbl">${esc(lbl)} · ${fmtT(at)}${shiftTxt}</div>${heroMain}</div>${doneBar}</div>`;
+  // have ready
+  const need={};
+  wk.days.forEach((d,i)=>["day","night"].forEach(k=>ps.forEach(({plan})=>{ const x=plan[i][k]; if(!x||x.done||!x.chosen) return; const n=need[x.chosen.id]=need[x.chosen.id]||new Set(); n.add(dayName(x.date)+(k==="night"?" night":" day")); })));
+  const order=Object.keys(need).sort((a,b)=>(byId(a)?.min??0)-(byId(b)?.min??0));
+  const needHtml=order.length?order.map(id=>{ const b=byId(id); return `<div class="need"><span class="dot" style="background:${esc(b.color)}"></span><span class="n">${esc(b.name)}</span><span class="w">${esc([...need[id]].join(", "))}</span></div>`; }).join(""):`<div class="hint">No blankets needed this week. 🎉</div>`;
+  const alerts=flags.flatMap(f=>f.alerts);
+  feedAll().forEach(({h,fs})=>{ if(fs.known&&fs.level!=="green") alerts.unshift(`${h.feed.grain||"Feed"}${horses().length>1?` (${h.name})`:""}: ${fs.days<=0?"out!":fs.days+" day"+(fs.days===1?"":"s")+" left. Time to buy more."}`); });
+  const visitLine=(date,slot,arr)=>{
+    if(!arr.length) return "";
+    const who=shiftOf(slot), c=barn.checks[date+"-"+slot];
+    return `<div class="flag">↻ <b>${fmtT(slot==="am"?barn.am:barn.pm)}</b>${who?` <span class="who">${esc(memberName(who))}</span>`:""} ${esc(arr.join("; "))}${c?` <span class="ok">✓</span>`:""}</div>`;
+  };
+  return `<header>${head}</header>
+  <div class="wide-top">${hero}
+    <div class="card"><h2>Have these ready</h2>${needHtml}</div>
+    <div class="card alerts"><h2>Heads up</h2>${alerts.length?alerts.map(a=>`<div class="a">⚠️ <span>${esc(a)}</span></div>`).join(""):`<p class="hint" style="margin-top:0">Nothing unusual this week.</p>`}</div>
+  </div>
+  <div class="week">${wk.days.map((d,i)=>{
+    const dayRows=ps.map(({h,plan})=>({h,x:plan[i].day})), nightRows=ps.map(({h,plan})=>({h,x:plan[i].night}));
+    const dayDone=dayRows[0].x&&dayRows[0].x.done;
+    const hi=dayRows[0].x?dayRows[0].x.p.t:null, lo=nightRows[0].x?nightRows[0].x.p.t:null;
+    return `<div class="day"><div class="dayhead"><b>${d.date===wk.today?"Today":dayName(d.date,true)}</b><span>${md(d.date)}${hi!=null&&lo!=null?` · ${hi}° / ${lo}°`:""}</span></div>
+      ${dayDone?`<div class="halves one">${halfBtn(nightRows,"Night")}</div>`:`<div class="halves">${halfBtn(dayRows,"Day")}${halfBtn(nightRows,"Night")}</div>`}
+      ${visitLine(d.date,"am",flags[i].am)}${visitLine(d.date,"pm",flags[i].pm)}</div>`;
+  }).join("")}</div>
+  <p class="hint" style="text-align:center;margin-top:14px">Tap any day or night to see why, or to make your own pick.</p>
+  <p class="hint" style="text-align:center;font-size:11px">Weather data by <a href="https://open-meteo.com/" style="color:inherit">Open-Meteo.com</a></p>`;
+}
+
+function viewCloset(){
+  const hs=horses(), sel=local.sel, all=hs.length>1&&sel==="all";
+  const list=barn.blankets.filter(b=>all||hs.length<=1||!b.horseId||b.horseId===sel).sort((a,b)=>a.min-b.min);
+  const owner=b=>hs.length>1?(b.horseId?(horseById(b.horseId)?.name||""):"Shared"):"";
+  return `<div class="narrow"><header><div class="eyebrow">Blanket closet</div><h1>Blankets</h1></header>${chips(true)}
+  <div class="card">${list.length?list.map(b=>`
+    <button class="bk" data-edit="${esc(b.id)}">
+      <span class="sw2" style="background:${esc(b.color)}"></span>
+      <span><div class="t">${esc(b.name)}${b.wp?'<span class="tag wp">Waterproof</span>':""}${b.rainOnly?'<span class="tag wp">Rain only</span>':""}${b.status!=="ready"?`<span class="tag out">${b.status==="laundry"?"At laundry":"Needs repair"}</span>`:""}</div>
+      <div class="s">${esc(b.kind)}${+b.grams?` · ${+b.grams}g`:""}${owner(b)?` · ${esc(owner(b))}`:""}</div></span>
+      <span class="r">${rangeTxt(b)}</span></button>`).join(""):`<div class="hint">No blankets yet. Add the ones you own.</div>`}</div>
+  <button class="btn" data-edit="new">+ Add a blanket</button>
+  <p class="hint">Each range is the "feels-like" temperature, after wind, rain and the horse's settings. ${hs.length>1?"“Shared” blankets can go on any horse.":""}</p></div>`;
+}
+
+function feedHorse(){ const hs=horses(); return (local.sel!=="all"&&horseById(local.sel))||hs[0]; }
+function feedTop(h){
+  const f=h.feed, fs=E.feedStatus(f,Date.now(),todayLocal()), g=esc(f.grain||"Grain");
+  const status=!fs.setup?`<p class="hint" style="margin-top:0">Enter how many pounds ${esc(h.name)} gets in Settings below, then how much is in the feed room.</p>`
+   :!fs.known?`<p class="hint" style="margin-top:0">How much ${g} is in the feed room right now?</p>`
+   :`<div class="big2" style="color:${LEVEL[fs.level]}">${fs.days} day${fs.days===1?"":"s"} left</div>
+     <p class="hint" style="margin-top:2px">About ${Math.round(fs.left)} lb (${fs.bags.toFixed(1)} bags) · runs out ${dayName(fs.runOut)} ${md(fs.runOut)}${fs.buyIn>0?` · buy by ${dayName(fs.buyBy)} ${md(fs.buyBy)}`:""}</p>`;
+  return `<div class="card"><h2>On hand</h2>${status}
+    ${fs.setup?`<div class="btnrow"><button class="btn" data-act="bought">+ I bought bags</button><button class="btn ghost" data-act="setStock">Set what's left</button></div>`:""}</div>
+  <div class="card"><h2>Feed plan · ${esc(h.name)}</h2>
+    <div class="meal"><b>AM</b><span>${+f.am?`${+f.am} lb ${g}`:"—"}${f.amExtra?` + ${esc(f.amExtra)}`:""}</span></div>
+    <div class="meal"><b>PM</b><span>${+f.pm?`${+f.pm} lb ${g}`:"—"}${f.pmExtra?` + ${esc(f.pmExtra)}`:""}</span></div>
+    <p class="hint">Everyone in the barn sees this plan.</p></div>`;
+}
+function viewFeed(){
+  const h=feedHorse(), f=h.feed;
+  const num=(k,label,step,ph)=>`<label class="f">${label}<input type="number" inputmode="decimal" step="${step}" min="0" data-feed="${k}" value="${+f[k]?esc(f[k]):""}" placeholder="${ph||""}"></label>`;
+  return `<div class="narrow"><header><div class="eyebrow">Feed</div><h1>${esc(f.grain||"Feed")}</h1></header>${chips(false)}
+  <div id="feedTop">${feedTop(h)}</div>
+  <div class="card"><h2>Settings</h2>
+    <label class="f">Grain name<input data-feed="grain" value="${esc(f.grain)}" maxlength="40"></label>
+    <div class="row2">${num("am","AM grain (lb)","0.25","3")}${num("pm","PM grain (lb)","0.25","3")}</div>
+    <div class="row2">
+      <label class="f">AM extras<input data-feed="amExtra" value="${esc(f.amExtra)}" maxlength="60" placeholder="SmartPak"></label>
+      <label class="f">PM extras<input data-feed="pmExtra" value="${esc(f.pmExtra)}" maxlength="60"></label>
+    </div>
+    <div class="row2">${num("bagLbs","Bag size (lb)","1","50")}${num("warnDays","Warn me (days ahead)","1","5")}</div>
+    <p class="hint">Extras show on the feed plan only and aren't counted down.</p></div></div>`;
+}
+
+function viewBarn(){
+  const hs=horses(), ms=barn.members, mine=me();
+  const opt=slot=>`<option value="">Anyone</option>${ms.map(m=>`<option value="${esc(m.id)}" ${shiftOf(slot)===m.id?"selected":""}>${esc(m.name)}</option>`).join("")}`;
+  const pushOk="serviceWorker" in navigator&&"PushManager" in window;
+  return `<div class="narrow"><header><div class="eyebrow">Barn</div><h1>${esc(barn.name)}</h1></header>
+  <div class="card"><h2>Horses</h2>
+    ${hs.map(h=>`<button class="row" data-horse="${esc(h.id)}"><span class="avatar">🐴</span><span><div class="t">${esc(h.name)}</div><div class="s">${[h.clipped&&"clipped",h.senior&&"senior",h.noShelter&&"no shelter",+h.runs>0&&"runs warm",+h.runs<0&&"runs cold"].filter(Boolean).join(", ")||"No adjustments"}</div></span><span class="r">›</span></button>`).join("")}
+    <button class="btn ghost" data-horse="new">+ Add a horse</button></div>
+  <div class="card"><h2>People & shifts</h2>
+    ${ms.map(m=>`<button class="row" data-member="${esc(m.id)}"><span class="avatar">${esc((m.name||"?").slice(0,1).toUpperCase())}</span><span><div class="t">${esc(m.name)}${m.id===local.memberId?" (you)":""}</div><div class="s">${[shiftOf("am")===m.id&&"Mornings",shiftOf("pm")===m.id&&"Evenings"].filter(Boolean).join(" & ")||"No set shift"}</div></span><span class="r">›</span></button>`).join("")}
+    <div class="row2">
+      <label class="f">Mornings (${fmtT(barn.am)})<select data-shift="am">${opt("am")}</select></label>
+      <label class="f">Evenings (${fmtT(barn.pm)})<select data-shift="pm">${opt("pm")}</select></label>
+    </div>
+    <p class="hint">Reminders go to the person on that shift. "Anyone" sends them to everyone.</p>
+    <button class="btn" data-act="invite">Invite someone</button></div>
+  <div class="card"><h2>Reminders on this device</h2>
+    <p class="hint" style="margin-top:0">About 30 minutes before ${fmtT(barn.am)} and ${fmtT(barn.pm)}: which blankets to put on or take off${shiftOf("am")||shiftOf("pm")?", for the person on shift":""}. Low feed is added to the morning one.</p>
+    ${!pushOk?`<p class="hint">${isIOS()&&!standalone()?"To get reminders, add Blanket Plan to your Home Screen and open it from there.":"This browser can't get reminders."}</p>`
+      :local.pushOn?`<p class="ok" style="font-weight:600;margin-top:8px">✓ Reminders are on</p><div class="btnrow"><button class="btn ghost" data-act="pushTest">Send a test</button><button class="btn ghost" data-act="pushOff">Turn off</button></div>`
+      :`<button class="btn" data-act="pushOn">Turn on reminders</button>`}
+    <div class="hint" id="pushMsg"></div></div>
+  <div class="card"><h2>Barn settings</h2>
+    <label class="f">Barn name<input data-barn="name" value="${esc(barn.name)}" maxlength="60"></label>
+    <label class="f">Location</label>
+    <div class="searchrow"><input class="inp" id="placeQ" placeholder="City or ZIP code" enterkeyhint="search"><button class="btn small" data-act="placeSearch">Search</button></div>
+    <div class="results" id="placeRes">${barn.place?`<button class="on" disabled>✓ ${esc(barn.place.name)}</button>`:""}</div>
+    <div class="row2">
+      <label class="f">Morning barn time<input type="time" data-barn="am" value="${esc(barn.am)}"></label>
+      <label class="f">Evening barn time<input type="time" data-barn="pm" value="${esc(barn.pm)}"></label>
+    </div></div>
+  <div class="card"><h2>This device</h2>
+    <p class="hint" style="margin-top:0">Signed in as <b>${esc(mine?mine.name:"?")}</b>. Your barn is saved online, so it's safe if this device is lost.</p>
+    <button class="btn danger" data-act="leave">Leave this barn on this device</button></div></div>`;
+}
+
+/* ================= sheets ================= */
+const sheet=$("sheet"), sheetIn=$("sheetIn"), scrim=$("scrim");
+function openSheet(html){ sheetIn.innerHTML='<div class="grab"></div>'+html; scrim.classList.add("on"); sheet.classList.add("on"); sheet.scrollTop=0; }
+function closeSheet(){ scrim.classList.remove("on"); sheet.classList.remove("on"); if(needsRender){ needsRender=false; render(); } }
+scrim.onclick=closeSheet;
+
+function findPeriod(key,horseId){
+  const wk=week(); if(!wk) return null; const h=horseById(horseId); if(!h) return null;
+  const plan=E.planHorse(barn,wk,h);
+  for(const pd of plan) for(const k of ["day","night"]) if(pd[k]&&pd[k].key===key) return pd[k];
+  return null;
+}
+function openPeriodPicker(key){
+  const hs=selHorses();
+  if(hs.length===1) return openPeriod(key,hs[0].id);
+  const rows=hs.map(h=>({h,x:findPeriod(key,h.id)})).filter(r=>r.x);
+  if(!rows.length) return;
+  const x0=rows[0].x;
+  openSheet(`<div class="eyebrow">${dayName(x0.date,true)} ${x0.kind} · ${md(x0.date)}</div><h3>Which horse?</h3>
+    ${rows.map(({h,x})=>`<button class="pickh" data-pick="${esc(h.id)}"><span class="dot" style="background:${x.chosen?esc(x.chosen.color):"transparent"};border:1px solid var(--line)"></span><b>${esc(h.name)}</b><span class="hint" style="margin:0">${x.chosen?esc(x.chosen.name):"No blanket"}${x.overridden?" (you)":""}</span></button>`).join("")}
+    <button class="btn ghost" id="pkX">Close</button>`);
+  $("pkX").onclick=closeSheet;
+  sheetIn.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>openPeriod(key,b.dataset.pick));
+}
+function openPeriod(key,horseId){
+  const x=findPeriod(key,horseId), h=horseById(horseId); if(!x) return;
+  const night=x.kind==="night", auto=x.auto;
+  const opts=[`<option value="__auto">Auto: ${auto?esc(auto.name):"No blanket"}</option>`,`<option value="none">No blanket</option>`]
+    .concat(E.blanketsFor(barn,horseId).map(b=>`<option value="${esc(b.id)}">${esc(b.name)}${b.status!=="ready"?" (not ready)":""}</option>`)).join("");
+  const hrs=x.p.hours.filter((_,i)=>i%2===0).map(hh=>`<div>${fmtHour(hh.t)}<b>${Math.round(hh.temp)}°</b>${hh.rain>=30?`🌧${hh.rain}%`:"&nbsp;"}</div>`).join("");
+  const ov=(barn.overrides[horseId]||{})[key];
+  openSheet(`
+    <div class="eyebrow">${esc(h.name)} · ${dayName(x.date,true)} ${night?"night":"day"} · ${night?fmtT(barn.pm)+"–"+fmtT(barn.am):fmtT(barn.am)+"–"+fmtT(barn.pm)}</div>
+    <h3>${x.chosen?esc(x.chosen.name):"No blanket"}</h3>
+    <dl class="kv"><dt>${night?"Low":"High"}</dt><dd>${x.p.t}°F at ${fmtHour(x.p.at)}</dd><dt>Wind (avg)</dt><dd>${x.p.wind} mph</dd>
+      <dt>Rain chance</dt><dd>${x.p.rain}%</dd><dt>Feels like for ${esc(h.name)}</dt><dd>${Math.round(x.eff)}°F</dd></dl>
+    <div class="hours">${hrs}</div>
+    <div class="reason">${x.notes.length?"Adjusted for "+esc(x.notes.join(", "))+". ":"No wind, rain or horse adjustments. "}
+      ${auto?`${esc(auto.name)} is set for ${rangeTxt(auto)}.`:"That's above the warmest blanket's range, so no blanket."}${x.warn?`<br><b>⚠️ ${esc(x.warn)}</b>`:""}</div>
+    <label class="f">Your pick<select id="ovSel">${opts}</select></label>
+    <p class="hint">Your pick is shared with everyone in the barn.</p>
+    <button class="btn" id="ovSave">Save</button><button class="btn ghost" id="ovClose">Close</button>`);
+  const sel=$("ovSel"); sel.value=ov===undefined?"__auto":ov;
+  $("ovSave").onclick=()=>{ closeSheet(); act({op:"override",horseId,key,value:sel.value==="__auto"?null:sel.value}); };
+  $("ovClose").onclick=closeSheet;
+}
+
+function openEditor(id){
+  const isNew=id==="new", hs=horses();
+  const defHorse=hs.length>1&&local.sel!=="all"?local.sel:null;
+  const b=isNew?{id:E.uid(8),name:"",kind:"Medium",grams:200,min:25,max:35,wp:true,rainOnly:false,color:E.COLORS[barn.blankets.length%E.COLORS.length],status:"ready",notes:"",horseId:defHorse}:Object.assign({},byId(id));
+  if(!b||!b.id) return;
+  openSheet(`
+    <h3>${isNew?"Add a blanket":"Edit blanket"}</h3>
+    <div class="pv"><span class="sw2" id="pvSw" style="background:${esc(b.color)}"></span><span><b id="pvName">${esc(b.name||"New blanket")}</b><div class="s">How it will look in the plan</div></span></div>
+    <label class="f">Name<input id="eName" value="${esc(b.name)}" placeholder="e.g. Navy Rambo 250g" maxlength="40"></label>
+    ${hs.length>1?`<label class="f">Belongs to<select id="eHorse"><option value="">Any horse (shared)</option>${hs.map(h=>`<option value="${esc(h.id)}" ${b.horseId===h.id?"selected":""}>${esc(h.name)}</option>`).join("")}</select></label>`:""}
+    <div class="row2">
+      <label class="f">Type<select id="eKind">${E.KINDS.map(k=>`<option ${k===b.kind?"selected":""}>${k}</option>`).join("")}</select></label>
+      <label class="f">Fill (grams)<input id="eGrams" type="number" inputmode="numeric" value="${+b.grams||0}" min="0" max="600"></label>
+    </div>
+    <div class="row2">
+      <label class="f">Use from (°F)<input id="eMin" type="number" inputmode="numeric" value="${+b.min}"></label>
+      <label class="f">Up to (°F)<input id="eMax" type="number" inputmode="numeric" value="${+b.max}"></label>
+    </div>
+    <p class="hint">For your warmest blanket, set "Use from" very low, like −30.</p>
+    <label class="tog" style="margin-top:6px"><span><div class="tt">Waterproof</div><div class="ts">Picked first when rain is likely</div></span><input type="checkbox" class="sw-in" id="eWp" ${b.wp?"checked":""}></label>
+    <label class="tog"><span><div class="tt">Only when rain is likely</div><div class="ts">Skip it on dry days</div></span><input type="checkbox" class="sw-in" id="eRain" ${b.rainOnly?"checked":""}></label>
+    <label class="f">Status<select id="eStatus"><option value="ready">Ready to use</option><option value="laundry">At the laundry</option><option value="repair">Needs repair</option></select></label>
+    <label class="f">Color</label>
+    <div class="colors" id="eColors">${E.COLORS.map(c=>`<button type="button" data-c="${c}" class="${c===b.color?"on":""}" style="background:${c}" aria-label="color"></button>`).join("")}</div>
+    <label class="f">Notes<textarea id="eNotes" rows="2" maxlength="200" placeholder="Size 78, belly band torn…">${esc(b.notes)}</textarea></label>
+    <div class="err" id="eErr"></div>
+    <button class="btn" id="eSave">${isNew?"Add blanket":"Save"}</button>
+    ${isNew?"":`<button class="btn danger" id="eDel">Delete blanket</button>`}
+    <button class="btn ghost" id="eCancel">Cancel</button>`);
+  $("eStatus").value=b.status||"ready";
+  let color=b.color;
+  $("eColors").onclick=e=>{ const c=e.target.closest("[data-c]"); if(!c) return; color=c.dataset.c; document.querySelectorAll("#eColors button").forEach(x=>x.classList.toggle("on",x===c)); $("pvSw").style.background=color; };
+  $("eName").oninput=()=>{ $("pvName").textContent=$("eName").value.trim()||"New blanket"; };
+  $("eCancel").onclick=closeSheet;
+  $("eSave").onclick=()=>{
+    const name=$("eName").value.trim(), mn=$("eMin").value, mx=$("eMax").value;
+    if(!name){ $("eErr").textContent="Give it a name."; return; }
+    if(mn===""||mx===""||+mn>=+mx){ $("eErr").textContent="“Use from” must be lower than “Up to.”"; return; }
+    const set={name,kind:$("eKind").value,grams:+$("eGrams").value||0,min:Math.round(+mn),max:Math.round(+mx),wp:$("eWp").checked,rainOnly:$("eRain").checked,status:$("eStatus").value,color,notes:$("eNotes").value.trim()};
+    if($("eHorse")) set.horseId=$("eHorse").value||null;
+    closeSheet(); act({op:"blanket",id:b.id,set});
+  };
+  const del=$("eDel");
+  if(del){ let armed=false; del.onclick=()=>{ if(!armed){ armed=true; del.textContent="Tap again to delete"; return; } closeSheet(); act({op:"delBlanket",id:b.id}); }; }
+}
+
+function runsLabel(v){ v=+v||0; return v===0?"Typical":v>0?`Runs warm: blanket ${v}° later`:`Runs cold: blanket ${-v}° sooner`; }
+function openHorse(id){
+  const isNew=id==="new", h=isNew?E.newHorse(E.uid(8),""):Object.assign({},horseById(id));
+  if(!h||!h.id) return;
+  const tg=(k,t,s)=>`<label class="tog"><span><div class="tt">${t}</div><div class="ts">${s}</div></span><input type="checkbox" class="sw-in" id="h_${k}" ${h[k]?"checked":""}></label>`;
+  openSheet(`<h3>${isNew?"Add a horse":esc(h.name)}</h3>
+    <label class="f">Name<input id="hName" value="${esc(h.name)}" maxlength="40"></label>
+    <div style="margin-top:8px">${tg("clipped","Clipped","Blankets about 10° sooner")}${tg("senior","Senior or hard keeper","Blankets about 5° sooner")}${tg("noShelter","No shelter in turnout","Blankets about 5° sooner")}</div>
+    <div style="padding-top:12px;border-top:1px solid var(--line)"><div style="font-weight:600">Runs warm or cold</div>
+      <div class="hint" style="margin-top:2px" id="runsLbl">${runsLabel(h.runs)}</div>
+      <input type="range" min="-10" max="10" step="1" id="hRuns" value="${+h.runs||0}">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--sub)"><span>Runs cold</span><span>Runs warm</span></div></div>
+    <div class="err" id="hErr"></div>
+    <button class="btn" id="hSave">${isNew?"Add horse":"Save"}</button>
+    ${!isNew&&horses().length>1?`<button class="btn danger" id="hDel">Remove ${esc(h.name)}</button>`:""}
+    <button class="btn ghost" id="hX">Cancel</button>`);
+  $("hRuns").oninput=()=>{ $("runsLbl").textContent=runsLabel($("hRuns").value); };
+  $("hX").onclick=closeSheet;
+  $("hSave").onclick=()=>{
+    const name=$("hName").value.trim(); if(!name){ $("hErr").textContent="Add a name."; return; }
+    closeSheet();
+    act({op:"horse",id:h.id,set:{name,clipped:$("h_clipped").checked,senior:$("h_senior").checked,noShelter:$("h_noShelter").checked,runs:+$("hRuns").value}});
+    if(isNew){ local.sel=h.id; persist(); render(); }
+  };
+  const del=$("hDel");
+  if(del){ let armed=false; del.onclick=()=>{ if(!armed){ armed=true; del.textContent="Tap again: also removes "+h.name+"'s own blankets"; return; } closeSheet(); if(local.sel===h.id) local.sel="all"; act({op:"delHorse",id:h.id}); }; }
+}
+function openMember(id){
+  const m=barn.members.find(x=>x.id===id); if(!m) return;
+  const mine=id===local.memberId;
+  openSheet(`<h3>${esc(m.name)}${mine?" (you)":""}</h3>
+    <label class="f">Name<input id="mmName" value="${esc(m.name)}" maxlength="40"></label>
+    <button class="btn" id="mmSave">Save</button>
+    ${mine?"":`<button class="btn danger" id="mmDel">Remove from barn</button>`}
+    <button class="btn ghost" id="mmX">Cancel</button>`);
+  $("mmX").onclick=closeSheet;
+  $("mmSave").onclick=()=>{ const n=$("mmName").value.trim(); if(!n) return; closeSheet(); act({op:"member",id,set:{name:n}}); };
+  const del=$("mmDel"); if(del){ let armed=false; del.onclick=()=>{ if(!armed){ armed=true; del.textContent="Tap again to remove"; return; } closeSheet(); act({op:"delMember",id}); }; }
+}
+async function openInvite(){
+  openSheet(`<h3>Invite someone</h3><p class="hint">Making a code…</p>`);
+  try{
+    const r=await api("POST","/api/barn",{action:"invite",id:local.barnId});
+    const link=location.origin+location.pathname+"?join="+r.code;
+    const text=`Join ${barn.name} in Blanket Plan to share blanketing: ${link}\n(or open the app and enter code ${r.code})`;
+    openSheet(`<h3>Invite someone</h3>
+      <p class="hint">Send them this link. They add the app to their Home Screen, choose “Join a barn” and enter the code.</p>
+      <div class="code">${esc(r.code)}</div>
+      <p class="hint" style="text-align:center">Code works for 14 days.</p>
+      ${navigator.share?`<button class="btn" id="ivShare">Share invite</button>`:""}
+      <button class="btn ${navigator.share?"ghost":""}" id="ivCopy">Copy invite</button>
+      <button class="btn ghost" id="ivX">Done</button>`);
+    $("ivX").onclick=closeSheet;
+    $("ivCopy").onclick=async()=>{ try{ await navigator.clipboard.writeText(text); toast("Invite copied"); }catch(e){ toast("Couldn't copy"); } };
+    if($("ivShare")) $("ivShare").onclick=()=>navigator.share({title:"Blanket Plan",text}).catch(()=>{});
+  }catch(e){ openSheet(`<h3>Invite someone</h3><p class="err">Couldn't make a code. Check your connection and try again.</p><button class="btn ghost" id="ivX">Close</button>`); $("ivX").onclick=closeSheet; }
+}
+function openStock(mode){
+  const h=feedHorse(), f=h.feed, fs=E.feedStatus(f,Date.now(),todayLocal()), bought=mode==="bought";
+  openSheet(`<h3>${bought?"Bought "+esc(f.grain||"feed"):"How much is left?"}</h3>
+    <p class="hint">${bought?"How many bags did you add to the feed room?":"Count what's in the feed room now. Halves are fine, like 1.5 bags."}</p>
+    <label class="f">Bags<input id="stN" type="number" inputmode="decimal" step="0.5" min="0" value="${bought?1:(fs.known?(Math.round(fs.bags*2)/2):"")}"></label>
+    <div class="err" id="stErr"></div><button class="btn" id="stGo">Save</button><button class="btn ghost" id="stX">Cancel</button>`);
+  $("stX").onclick=closeSheet;
+  $("stGo").onclick=()=>{
+    const n=parseFloat($("stN").value); if(!isFinite(n)||n<0){ $("stErr").textContent="Enter a number of bags."; return; }
+    const cur=E.feedStatus(h.feed,Date.now(),todayLocal()), lbs=n*(+f.bagLbs||50);
+    closeSheet(); act({op:"feed",horseId:h.id,set:{stockLbs:bought?((cur.known?cur.left:0)+lbs):lbs,stockAt:Date.now()}});
+  };
+}
+
+/* ================= reminders ================= */
+function b64u(s){ const p="=".repeat((4-s.length%4)%4), b=atob((s+p).replace(/-/g,"+").replace(/_/g,"/")); return Uint8Array.from(b,c=>c.charCodeAt(0)); }
+async function pushOn(){
+  const msg=t=>{ const el=$("pushMsg"); if(el) el.textContent=t; };
+  try{
+    const perm=await Notification.requestPermission();
+    if(perm!=="granted"){ msg("Notifications are blocked. Allow them for Blanket Plan in Settings, then try again."); return; }
+    msg("Turning on…");
+    const reg=await navigator.serviceWorker.ready;
+    const {publicKey}=await api("GET","/api/push");
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(publicKey)});
+    await api("POST","/api/push",{action:"subscribe",barnId:local.barnId,memberId:local.memberId,sub:sub.toJSON()});
+    local.pushOn=true; persist(); render(); toast("Reminders are on");
+  }catch(e){ msg("Couldn't turn on reminders. Check your connection and try again."); }
+}
+async function pushCall(action){
+  try{
+    const reg=await navigator.serviceWorker.ready, sub=await reg.pushManager.getSubscription();
+    if(action==="unsubscribe"){ if(sub){ await api("POST","/api/push",{action,barnId:local.barnId,memberId:local.memberId,sub:sub.toJSON()}).catch(()=>{}); await sub.unsubscribe(); } local.pushOn=false; persist(); render(); toast("Reminders off"); return; }
+    if(!sub){ local.pushOn=false; persist(); render(); return; }
+    await api("POST","/api/push",{action,barnId:local.barnId,memberId:local.memberId,sub:sub.toJSON()}); toast("Test sent");
+  }catch(e){ toast("Couldn't reach the server"); }
+}
+
+/* ================= render ================= */
+const app=$("app"), nav=$("nav");
+function screen(){
+  if(local.barnId&&barn) return "tabs";
+  if(flow==="join") return "join";
+  if(flow==="new") return "setup";
+  if(!standalone()&&isIOS()&&!local.installSkipped) return "install";
+  if(old&&old.setupDone) return "migrate";
+  if(inviteFromUrl) return "join";
+  return "welcome";
+}
+function renderFeedbar(show){
+  const fb=$("feedbar");
+  if(!show){ fb.innerHTML=""; document.body.classList.remove("hasFeed"); return; }
+  const list=feedAll().filter(x=>x.fs.setup);
+  let dot="#B9B1A2", t="Feed", s="Set up feed tracking →";
+  if(list.length){
+    const known=list.filter(x=>x.fs.known).sort((a,b)=>RANK[a.fs.level]-RANK[b.fs.level]||a.fs.days-b.fs.days);
+    if(!known.length){ t=esc(list[0].h.feed.grain||"Feed"); s="Enter how much you have →"; }
+    else{ const {h,fs}=known[0]; dot=LEVEL[fs.level]; t=esc(h.feed.grain||"Feed")+(horses().length>1&&selHorses().length>1?` · ${esc(h.name)}`:"");
+      s=fs.days<=0?"Out of feed!":fs.buyIn<=0?`${fs.days} day${fs.days===1?"":"s"} left · buy now`:`${fs.days} days left · buy by ${dayName(fs.buyBy)} ${md(fs.buyBy)}`; }
+  }
+  fb.innerHTML=`<button data-gofeed="1"><span class="fd" style="background:${dot}"></span><span class="ft">${t}</span><span class="fs">${s}</span></button>`;
+  document.body.classList.add("hasFeed");
+}
+function render(){
+  const sc=screen();
+  nav.style.display=sc==="tabs"?"":"none";
+  document.body.classList.toggle("noNav",sc!=="tabs");
+  if(sc!=="tabs"){ renderFeedbar(false);
+    app.innerHTML=sc==="install"?viewInstall():sc==="welcome"?viewWelcome():sc==="migrate"?viewMigrate():sc==="join"?viewJoin():viewSetup(); return; }
+  if(local.sel!=="all"&&!horseById(local.sel)) local.sel="all";
+  app.innerHTML=tab==="week"?viewWeek():tab==="closet"?viewCloset():tab==="feed"?viewFeed():viewBarn();
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
+  renderFeedbar(tab==="week");
+}
+
+/* ================= actions ================= */
+async function placeSearch(){
+  const q=$("placeQ"), res=$("placeRes"); if(!q||!res) return;
+  if(q.value.trim().length<2){ res.innerHTML=`<div class="err">Type a city or ZIP code.</div>`; return; }
+  res.innerHTML=`<p class="hint">Searching…</p>`;
+  try{
+    const list=await geocode(q.value);
+    if(!list.length){ res.innerHTML=`<div class="err">No matches. Try "City, State" or a ZIP code.</div>`; return; }
+    res.innerHTML=list.map((x,i)=>`<button data-place="${i}">${esc(x.name)}</button>`).join("");
+    res.onclick=e=>{ const b=e.target.closest("[data-place]"); if(!b) return; const p=list[+b.dataset.place];
+      res.innerHTML=`<button class="on" disabled>✓ ${esc(p.name)}</button>`;
+      if(screen()==="tabs"){ act({op:"barn",set:{place:p}},{silent:true}); loadForecast(true); } else setupPlace=p; };
+  }catch(e){ res.innerHTML=`<div class="err">Couldn't search right now. Check your connection.</div>`; }
+}
+async function createBarn(made,errEl,btn){
+  btn.disabled=true; btn.textContent="Setting up…";
+  try{
+    const doc=await api("POST","/api/barn",{action:"create",doc:made.doc});
+    local.barnId=doc.id; local.memberId=made.memberId; local.pending=[]; barn=doc; persist(); flow=null; tab="week";
+    render(); loadForecast(true); return true;
+  }catch(e){ errEl.textContent="Couldn't reach the server. Check your connection and try again."; btn.disabled=false; btn.textContent="Try again"; return false; }
+}
+app.addEventListener("click",async e=>{
+  const go=e.target.closest("[data-tab-go]"); if(go){ tab=go.dataset.tabGo; render(); return; }
+  const sel=e.target.closest("[data-sel]"); if(sel){ local.sel=sel.dataset.sel; persist(); render(); return; }
+  const o=e.target.closest("[data-open]"); if(o){ openPeriodPicker(o.dataset.open); return; }
+  const ed=e.target.closest("[data-edit]"); if(ed){ openEditor(ed.dataset.edit); return; }
+  const ho=e.target.closest("[data-horse]"); if(ho){ openHorse(ho.dataset.horse); return; }
+  const mb=e.target.closest("[data-member]"); if(mb){ openMember(mb.dataset.member); return; }
+  const a=e.target.closest("[data-act]"); if(!a) return;
+  const k=a.dataset.act;
+  if(k==="skipInstall"){ local.installSkipped=true; persist(); render(); }
+  else if(k==="flowNew"){ flow="new"; render(); }
+  else if(k==="flowJoin"){ flow="join"; render(); }
+  else if(k==="flowBack"){ flow=null; render(); }
+  else if(k==="placeSearch") placeSearch();
+  else if(k==="doSetup"){
+    const me=$("sMe").value.trim(), hn=$("sHorse").value.trim(), err=$("sErr");
+    if(!me){ err.textContent="Add your first name."; return; } if(!hn){ err.textContent="Add your horse's name."; return; }
+    if(!setupPlace){ err.textContent="Search for the barn's town or ZIP and pick it from the list."; return; }
+    if(hr($("sPm").value)<=hr($("sAm").value)){ err.textContent="Evening barn time should be after the morning one."; return; }
+    createBarn(E.newBarn({memberName:me,horseName:hn,place:setupPlace,am:$("sAm").value,pm:$("sPm").value}),err,a);
+  }
+  else if(k==="doMigrate"){
+    const n=$("mName").value.trim(); if(!n){ $("mErr").textContent="Add your first name."; return; }
+    if(await createBarn(E.migrate(old,n),$("mErr"),a)){ store(OLDKEY+".backup",old); store(OLDKEY,null); }
+  }
+  else if(k==="doJoin"){
+    const code=$("jCode").value.toUpperCase().replace(/[^A-Z0-9]/g,""), n=$("jName").value.trim(), err=$("jErr");
+    if(code.length<6){ err.textContent="Enter the 6-character code."; return; } if(!n){ err.textContent="Add your first name."; return; }
+    a.disabled=true; a.textContent="Joining…";
+    try{
+      const info=await api("GET","/api/barn?invite="+code);
+      const memberId=E.uid(10);
+      const doc=await api("POST","/api/barn",{id:info.barnId,ops:[{op:"member",id:memberId,set:{name:n}}]});
+      local.barnId=doc.id; local.memberId=memberId; local.pending=[]; barn=doc; flow=null; tab="week"; persist();
+      if(location.search) history.replaceState(null,"",location.pathname);
+      render(); loadForecast(true); toast("Welcome to "+doc.name);
+    }catch(ex){ err.textContent=ex.status===404?"That code didn't work. Check it, or ask for a new invite.":"Couldn't reach the server. Try again."; a.disabled=false; a.textContent="Join"; }
+  }
+  else if(k==="refresh"){ loadForecast(true); pull(); }
+  else if(k==="check"){ act({op:"check",key:a.dataset.key,done:true,memberId:local.memberId,at:Date.now()}); toast("Marked done"); }
+  else if(k==="uncheck"){ act({op:"check",key:a.dataset.key,done:false}); }
+  else if(k==="bought") openStock("bought");
+  else if(k==="setStock") openStock("set");
+  else if(k==="invite") openInvite();
+  else if(k==="pushOn") pushOn();
+  else if(k==="pushOff") pushCall("unsubscribe");
+  else if(k==="pushTest") pushCall("test");
+  else if(k==="leave"){
+    if(a.dataset.armed!=="1"){ a.dataset.armed="1"; a.textContent="Tap again to leave (the barn stays for everyone else)"; return; }
+    if(local.pushOn) await pushCall("unsubscribe");
+    local={barnId:null,memberId:null,pending:[],sel:"all",installSkipped:local.installSkipped,pushOn:false}; barn=null; persist(); render();
+  }
+});
+app.addEventListener("keydown",e=>{ if(e.key==="Enter"&&e.target.id==="placeQ"){ e.preventDefault(); placeSearch(); } });
+let tIn=null;
+app.addEventListener("input",e=>{
+  const fk=e.target.dataset.feed, bk=e.target.dataset.barn;
+  if(fk){
+    const h=feedHorse(); let v=e.target.value;
+    if(["am","pm","bagLbs","warnDays"].includes(fk)){ v=parseFloat(v); v=isFinite(v)&&v>=0?v:0; }
+    clearTimeout(tIn); tIn=setTimeout(()=>{ act({op:"feed",horseId:h.id,set:{[fk]:v}},{silent:true}); const ft=$("feedTop"); if(ft) ft.innerHTML=feedTop(feedHorse()); },500);
+  } else if(bk){
+    const v=e.target.value;
+    if((bk==="am"||bk==="pm")&&!/^\d{2}:\d{2}$/.test(v)) return;
+    clearTimeout(tIn); tIn=setTimeout(()=>act({op:"barn",set:{[bk]:v}},{silent:true}),600);
+  }
+});
+app.addEventListener("change",e=>{
+  const s=e.target.dataset.shift; if(s) act({op:"shift",slot:s,memberId:e.target.value||null});
+});
+nav.addEventListener("click",e=>{ const b=e.target.closest("[data-tab]"); if(!b) return; tab=b.dataset.tab; render(); window.scrollTo(0,0); });
+$("feedbar").addEventListener("click",e=>{ if(e.target.closest("[data-gofeed]")){ tab="feed"; render(); window.scrollTo(0,0); } });
+
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"&&local.barnId){ pull(); loadForecast(false); } });
+setInterval(()=>{ if(document.visibilityState==="visible"&&local.barnId) pull(); },60000);
+window.addEventListener("online",()=>flush());
+if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+render();
+if(local.barnId){ pull(); loadForecast(false); }
+</script>
+</body>
+
+</html>
