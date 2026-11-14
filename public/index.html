@@ -196,19 +196,8 @@ nav button.on{color:var(--forest)}
 .pickh b{flex:1}
 .toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:12px;padding:9px 14px;font-size:14px;font-weight:600;z-index:20;display:none}
 .toast.on{display:block}
-/* forecast strip */
-.wxstrip{display:flex;align-items:stretch;background:#1F3A5F;color:#fff;border-radius:16px;margin-top:12px;overflow:hidden}
-.wxnow{display:flex;align-items:center;gap:8px;padding:10px 14px;border-right:1px solid rgba(255,255,255,.15);flex:none}
-.wxnow svg{width:42px;height:42px}
-.wxnow b{font-size:30px;font-weight:600;letter-spacing:-.02em}
-.wxnow small{display:block;font-size:11px;opacity:.75;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
-.wxdays{display:flex;overflow-x:auto;flex:1;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.wxdays::-webkit-scrollbar{display:none}
-.wxd{flex:1 0 64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 4px}
-.wxd span{font-size:12px;font-weight:600;opacity:.85}
-.wxd svg{width:28px;height:28px}
-.wxd em{font-style:normal;font-size:12.5px;font-weight:600}
-.wxd em i{font-style:normal;opacity:.6;font-weight:500}
+.dayhead .wxi{display:inline-flex;align-items:center;gap:6px}
+.dayhead .wxi svg{width:26px;height:26px;flex:none;background:#1F3A5F;border-radius:8px;padding:3px}
 </style>
 </head>
 <body>
@@ -327,7 +316,7 @@ async function loadForecast(force){
   if(fresh&&!force){ fcStatus="ok"; safeRender(); return; }
   fcStatus="loading"; safeRender();
   try{
-    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&hourly=temperature_2m,precipitation_probability,precipitation,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&current=temperature_2m,weather_code,is_day&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=9`);
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&hourly=temperature_2m,precipitation_probability,precipitation,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=9`);
     if(!r.ok) throw new Error("forecast");
     const data=await r.json(); if(!data.hourly||!data.hourly.time) throw new Error("bad");
     fc={lat:p.lat,lon:p.lon,fetchedAt:Date.now(),data}; store(FKEY,fc); fcStatus="ok";
@@ -340,7 +329,7 @@ function week(){
   return E.buildWeek(fc.data,barn.am,barn.pm,Date.now());
 }
 
-/* ================= forecast strip ================= */
+/* ================= weather icons ================= */
 const CLOUD='<path d="M8 19h9.5a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.6 11.2 3.9 3.9 0 0 0 8 19z" fill="#E8EEF5" stroke="#E8EEF5" stroke-width="1"/>';
 const SUN=(cx,cy,r)=>{ let rays=""; for(let i=0;i<8;i++){ const a=i*Math.PI/4, x1=cx+Math.cos(a)*(r+2.2), y1=cy+Math.sin(a)*(r+2.2), x2=cx+Math.cos(a)*(r+4.6), y2=cy+Math.sin(a)*(r+4.6); rays+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`; }
   return `<g stroke="#F5CB3B" stroke-width="1.8" stroke-linecap="round" fill="none"><circle cx="${cx}" cy="${cy}" r="${r}"/>${rays}</g>`; };
@@ -360,15 +349,9 @@ function wxIcon(code,day){
   if(code>=95) return svg(up(CLOUD)+bolt);
   return svg(up(CLOUD)+drops); // drizzle, rain, showers
 }
-function forecastStrip(){
-  const d=fc&&fc.data; if(!d||!d.daily||!d.daily.time) return "";
-  const today=new Date(Date.now()+(d.utc_offset_seconds||0)*1000).toISOString().slice(0,10);
-  const D=d.daily, start=Math.max(0,D.time.indexOf(today));
-  const days=D.time.slice(start,start+7).map((t,i)=>{ const j=start+i;
-    return `<div class="wxd"><span>${i===0?"Today":dayName(t)}</span>${wxIcon(D.weather_code[j],true)}<em>${Math.round(D.temperature_2m_max[j])}°<i>/${Math.round(D.temperature_2m_min[j])}°</i></em></div>`; }).join("");
-  const c=d.current;
-  const now=c?`<div class="wxnow">${wxIcon(c.weather_code,c.is_day!==0)}<div><small>Now</small><b>${Math.round(c.temperature_2m)}°</b></div></div>`:"";
-  return `<div class="wxstrip">${now}<div class="wxdays">${days}</div></div>`;
+function dayIcon(date){
+  const D=fc&&fc.data&&fc.data.daily; if(!D||!D.time) return "";
+  const j=D.time.indexOf(date); return j<0?"":wxIcon(D.weather_code[j],true);
 }
 
 /* ================= plan helpers ================= */
@@ -517,7 +500,7 @@ function viewWeek(){
     const who=shiftOf(slot), c=barn.checks[date+"-"+slot];
     return `<div class="flag">↻ <b>${fmtT(slot==="am"?barn.am:barn.pm)}</b>${who?` <span class="who">${esc(memberName(who))}</span>`:""} ${esc(arr.join("; "))}${c?` <span class="ok">✓</span>`:""}</div>`;
   };
-  return `<header>${head}</header>${forecastStrip()}
+  return `<header>${head}</header>
   <div class="wide-top">${hero}
     <div class="card"><h2>Have these ready</h2>${needHtml}</div>
     <div class="card alerts"><h2>Heads up</h2>${alerts.length?alerts.map(a=>`<div class="a">⚠️ <span>${esc(a)}</span></div>`).join(""):`<p class="hint" style="margin-top:0">Nothing unusual this week.</p>`}</div>
@@ -526,7 +509,7 @@ function viewWeek(){
     const dayRows=ps.map(({h,plan})=>({h,x:plan[i].day})), nightRows=ps.map(({h,plan})=>({h,x:plan[i].night}));
     const dayDone=dayRows[0].x&&dayRows[0].x.done;
     const hi=dayRows[0].x?dayRows[0].x.p.t:null, lo=nightRows[0].x?nightRows[0].x.p.t:null;
-    return `<div class="day"><div class="dayhead"><b>${d.date===wk.today?"Today":dayName(d.date,true)}</b><span>${md(d.date)}${hi!=null&&lo!=null?` · ${hi}° / ${lo}°`:""}</span></div>
+    return `<div class="day"><div class="dayhead"><b class="wxi">${dayIcon(d.date)}${d.date===wk.today?"Today":dayName(d.date,true)}</b><span>${md(d.date)}${hi!=null&&lo!=null?` · ${hi}° / ${lo}°`:""}</span></div>
       ${dayDone?`<div class="halves one">${halfBtn(nightRows,"Night")}</div>`:`<div class="halves">${halfBtn(dayRows,"Day")}${halfBtn(nightRows,"Night")}</div>`}
       ${visitLine(d.date,"am",flags[i].am)}${visitLine(d.date,"pm",flags[i].pm)}</div>`;
   }).join("")}</div>
